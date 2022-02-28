@@ -10,6 +10,6 @@
 _추후 추가 예정_
 
 
-###컴퓨터 비전
+## 컴퓨터 비전
 
 ![캡처](https://user-images.githubusercontent.com/77967958/155924659-70820bad-f7bd-41bc-8aa7-0d72dacafd5b.PNG)
