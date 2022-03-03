@@ -2,13 +2,14 @@
 #실행 전 가상환경 실행하기 capstone 경로에서 source bin/activate로 실행!!!!!!!!!!!
 #아나콘다 프롬프트 열고 conda activate capstone 후 code 로 vscode실행 그리고 코드에서 우클릭 후 RUN PYTHON FILE IN TERMINAL로 실해하기
 #####################
+from functools import total_ordering
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
 def getImage():
-    image = cv2.imread(".\grass.jpg")#이미지 읽기r
+    image = cv2.imread("capstone\computerVision\grass.jpg")#이미지 읽기r
     image = cv2.resize(image, dsize=(720,1080))
     plt.subplot(231),plt.imshow(image),plt.title('Input')
     return image
@@ -25,7 +26,7 @@ def getgray(image):
 
 def getCircleCenterPoint(image): #graysclae을 인풋으로 넣어줘야 함!!!!!!!!!!!!!!!!!!!!!
     circles = cv2.HoughCircles(image, cv2.HOUGH_GRADIENT, 1, 300,
-                               param1=250, param2=40, minRadius=50, maxRadius=150)
+                               param1=250, param2=30, minRadius=50, maxRadius=150)
     print(circles)
     
     cornerpoint = [[0 for col in range(2)] for row in range(4)]
@@ -38,7 +39,7 @@ def getCircleCenterPoint(image): #graysclae을 인풋으로 넣어줘야 함!!!!
             point[i] = [cx, cy]
 
     rows,cols = image.shape
-    #print(point)
+    print(point)
 
     #point = [[45,140],[600,67],[50,986],[612,1051]]
 
@@ -47,7 +48,7 @@ def getCircleCenterPoint(image): #graysclae을 인풋으로 넣어줘야 함!!!!
     leftUpperPoint = [pts1[1][0],pts1[0][0]]
     pts1[2]=rightUnderPoint
     pts1[3]=leftUpperPoint
-    #print(pts1)
+    print(pts1)
     plt.plot(*zip(*point), marker='.', color='r', ls='')
     return pts1
 
@@ -74,24 +75,29 @@ def getTall(img_mask): # 키 구하는 함수 마스크를 인풋으로 줘야�
     corners = cv2.goodFeaturesToTrack(cardCanny, 100, 0.1, 0, blockSize=5, useHarrisDetector=True, k =0.03) # 엣지 디텍션 하기. 
     #print(corners)
     
-    root = [] # 뿌리 부근 좌표 리스트
-    leaf = [] # 이파리 끝 부분 좌표 리스트
-
+    #root  # 뿌리 부근 좌표 리스트
+    #leaf # 이파리 끝 부분 좌표 리스트
+    total = []
     for i in range(len(corners)): # 119 이상이면 풀의 대가리 , 80 이하면 풀의 뿌리 끝점
         temp = corners[i][0][1]
+        total.append(temp)
         
-        if(temp>130):
-            root.append(temp)
-        elif(temp<120):
-            leaf.append(temp)
-        else:
-            continue
+    uppertemp = []
+    lowertemp = []
         
-    #print(root)
-    #print(leaf)
+    total.sort()
+    uppertemp = total
+    leaf = sum(uppertemp[0:5])
 
-    rootstartavg = sum(root) / len(root)
-    leafstartavg = sum(leaf) / len(leaf)
+    total.reverse()
+    lowertemp = total
+    root = sum(lowertemp[0:5])
+    
+    print(root)
+    print(leaf)
+
+    rootstartavg = root / 5
+    leafstartavg = leaf / 5
     tall = rootstartavg - leafstartavg
     tall = tall.__round__(2)
     print(tall)
