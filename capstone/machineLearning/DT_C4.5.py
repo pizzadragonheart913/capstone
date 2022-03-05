@@ -10,3 +10,6 @@ if __name__=='__main__':
     print('-----------------------')
     prediction = chef.predict(model, predata.iloc[0])
     print(prediction)
+
+
+    pip install sklearn

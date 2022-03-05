@@ -1,20 +1,19 @@
-from cProfile import label
-from pyexpat import features
-from sklearn.datasets import load_iris
-from sklearn.metrics import accuracy_score
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import KFold, train_test_split
-import pandas as pd
-import numpy as np
+# import sklearn
+# from sklearn.datasets import load_iris
+# from sklearn.metrics import accuracy_score
+# from sklearn.tree import DecisionTreeClassifier
+# from sklearn.model_selection import KFold, train_test_split
+# import pandas as pd
+# import numpy as np
+# print(sklearn.__version__)
+# iris = load_iris()
+# iris_df = pd.DataFrame(data = iris.data, columns=iris.feature_names)
+# iris_df['label'] = iris.target
+# iris_df['label'].value_counts()
 
-iris = load_iris()
-iris_df = pd.DataFrame(data = iris.data, columns=iris.feature_names)
-iris_df['label'] = iris.target
-iris_df['label'].value_counts()
-
-print(iris_df['label'])
-#key = iris.keys()
-#print(key)
+# print(iris_df['label'])
+# #key = iris.keys()
+# #print(key)
 
 
 
@@ -47,3 +46,20 @@ print(iris_df['label'])
 #     cv_accuracy.append(accuracy)
     
 # print('\n##평균 검증 정확도: ', np.mean(cv_accuracy))
+
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import KFold, train_test_split
+import pandas as pd
+
+iris = load_iris()
+iris_data = iris.data
+
+iris_label = iris.target
+
+print(iris_label)
+print(iris.target_names)
+
+iris_df = pd.DataFrame(data = iris.data, columns=iris.feature_names)
+iris_df['label'] = iris.target
+iris_df.head(3)

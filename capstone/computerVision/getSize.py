@@ -10,7 +10,7 @@ import cv2
 
 def getImage():
     image = cv2.imread("capstone\computerVision\grass.jpg")#이미지 읽기r
-    image = cv2.resize(image, dsize=(720,1080))
+    image = cv2.resize(image, dsize=(360,540))
     plt.subplot(231),plt.imshow(image),plt.title('Input')
     return image
 
