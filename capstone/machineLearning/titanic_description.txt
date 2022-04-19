@@ -1,0 +1,12 @@
+PassengerId - 승객 아이디
+Survived - 생존 여부 (0 : 사망, 1 : 생존)
+Pclass - 좌석 등급(1 : 1등석, 2 : 2등석, 3 : 3등석)
+Name - 승객 이름
+Sex - 성별
+Age - 나이
+SibSp - 함께 탑승한 자녀와 배우자 수
+Parch - 함께 탑승한 부모님과 아이들 수
+Ticket - 티켓 고유 번호
+Fare - 요금
+Cabin - 수하물 번호
+Embarked - 선착장 (C : Cherbourg, Q : Queenstown, S : Southampton)

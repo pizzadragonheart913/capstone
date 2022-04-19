@@ -2,12 +2,14 @@
 #실행 전 가상환경 실행하기 capstone 경로에서 source bin/activate로 실행!!!!!!!!!!!
 #아나콘다 프롬프트 열고 conda activate capstone 후 code 로 vscode실행 그리고 코드에서 우클릭 후 RUN PYTHON FILE IN TERMINAL로 실해하기
 #####################
+from functools import total_ordering
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
 def getImage():
-    image = cv2.imread("capstone\computerVision\grass.jpg")#이미지 읽기r
+    image = cv2.imread(".\grass.jpg")#이미지 읽기r
     image = cv2.resize(image, dsize=(720,1080))
     plt.subplot(231),plt.imshow(image),plt.title('Input')
     return image
@@ -19,6 +21,7 @@ def getBlur(image):
 def getgray(image):  
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     plt.subplot(235),plt.imshow(gray, cmap='gray'),plt.title('gray')
+
     return gray
 
 def getCircleCenterPoint(image): #graysclae을 인풋으로 넣어줘야 함!!!!!!!!!!!!!!!!!!!!!
@@ -26,6 +29,7 @@ def getCircleCenterPoint(image): #graysclae을 인풋으로 넣어줘야 함!!!!
                                param1=250, param2=30, minRadius=50, maxRadius=150)
     print(circles)
     
+    cornerpoint = [[0 for col in range(2)] for row in range(4)]
     point = [[0,0],[0,0],[0,0],[0,0]]
 
     # 원 중심 좌표 얻은 리스트로 작은 원을 그려서 표시

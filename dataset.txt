@@ -1,0 +1,22 @@
+tall,temp,dirthumi,humidity,Decision
+,12,bad,30,poor
+,13, bad,60,poor
+,14,bad,70,poor
+,15,nice,80,good
+,16,nice,90,poor
+,17,nice,80,good
+,18,nice,50,poor
+,19,nice,90,poor
+,20,nice,50,poor
+,21,nice,60,good
+,22,nice,70,good
+,23,nice,60,good
+,24,nice,20,poor
+,25,nice,40,poor
+,25,nice,60,good
+,26,bad,70,poor
+,27,bad,80,poor
+,28,bad,20,poor
+,29,bad,50,poor
+3,30,bad,40,poor
+10,31,bad,25,poor
