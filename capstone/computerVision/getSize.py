@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import cv2
 
 def getImage():
-    image = cv2.imread("capstone\computerVision\grass.jpg")#이미지 읽기r
-    image = cv2.resize(image, dsize=(720,1080))
+    image = cv2.imread("capstone\computerVision\grass1.jpg")#이미지 읽기r
+    image = cv2.resize(image, dsize=(640,480))
     plt.subplot(231),plt.imshow(image),plt.title('Input')
     return image
 
@@ -23,7 +23,7 @@ def getgray(image):
 
 def getCircleCenterPoint(image): #graysclae을 인풋으로 넣어줘야 함!!!!!!!!!!!!!!!!!!!!!
     circles = cv2.HoughCircles(image, cv2.HOUGH_GRADIENT, 1, 300,
-                               param1=250, param2=30, minRadius=50, maxRadius=150)
+                               param1=200, param2=30, minRadius=40, maxRadius=150)
     print(circles)
     
     point = [[0,0],[0,0],[0,0],[0,0]]
@@ -35,7 +35,6 @@ def getCircleCenterPoint(image): #graysclae을 인풋으로 넣어줘야 함!!!!
             point[i] = [cx, cy]
 
     rows,cols = image.shape
-    print(point)
 
     #point = [[45,140],[600,67],[50,986],[612,1051]]
 
@@ -44,22 +43,23 @@ def getCircleCenterPoint(image): #graysclae을 인풋으로 넣어줘야 함!!!!
     leftUpperPoint = [pts1[1][0],pts1[0][0]]
     pts1[2]=rightUnderPoint
     pts1[3]=leftUpperPoint
-    print(pts1)
-    plt.plot(*zip(*point), marker='.', color='r', ls='')
+    
     return pts1
 
 def tiltAndCrop(pts1, image): #원의 중심좌표 있는거로 넣어줄 것. 입력은 블러 이미지로 인풋!!!!!!!
-    pts2 = np.float32([[0,0],[70,150],[0,150],[70,0]]) #일단은 변수를 하드코딩으로 넣었지만 나중에 자동으로 계산해서 넣을 수 있게 하기.
+    pts2 = np.float32([[0,0],[150,175],[0,175],[150,0]]) #일단은 변수를 하드코딩으로 넣었지만 나중에 자동으로 계산해서 넣을 수 있게 하기.
+    if(pts1.min() == 0.0):
+        return("error")
 
     M = cv2.getPerspectiveTransform(pts1,pts2)# a4용지에 맞춰서 tilt, crop한다.
 
-    dst = cv2.warpPerspective(image,M,(70,150))# a4용지에 맞춰서 tilt, crop한다.
+    dst = cv2.warpPerspective(image,M,(70,175))# a4용지에 맞춰서 tilt, crop한다.
     plt.subplot(232),plt.imshow(dst),plt.title('Output')
     return dst
 
 def getMask(image): #인풋을 dst로 줘야함.
     img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV) # cvtColor 함수를 이용하여 hsv 색공간으로 변환5
-    lower_green = np.array([32, 60, 60]) # hsv 이미지에서 바이너리 이미지로 생성 , 적당한 값 30
+    lower_green = np.array([32, 80, 80]) # hsv 이미지에서 바이너리 이미지로 생성 , 적당한 값 30
     upper_green = np.array([75, 255, 255])
     img_mask = cv2.inRange(img_hsv, lower_green, upper_green) # 범위내의 픽셀들은 흰색, 나머지 검은색
     plt.subplot(233),plt.imshow(img_mask),plt.title('mask')
@@ -74,7 +74,8 @@ def getTall(img_mask): # 키 구하는 함수 마스크를 인풋으로 줘야�
     #root  # 뿌리 부근 좌표 리스트
     #leaf # 이파리 끝 부분 좌표 리스트
     total = []
-    for i in range(len(corners)): # 119 이상이면 풀의 대가리 , 80 이하면 풀의 뿌리 끝점
+    
+    for i in range(len(corners)): 
         temp = corners[i][0][1]
         total.append(temp)
         
@@ -88,16 +89,17 @@ def getTall(img_mask): # 키 구하는 함수 마스크를 인풋으로 줘야�
     total.reverse()
     lowertemp = total
     root = sum(lowertemp[0:5])
-    
-    print(root)
-    print(leaf)
 
     rootstartavg = root / 5
     leafstartavg = leaf / 5
     tall = rootstartavg - leafstartavg
     tall = tall.__round__(2)
-    print(tall)
+    print("키는:",tall)
     return(tall)
+
+def erroroccur():
+    print("원인식 불가")
+    return 1
 
 if __name__ == "__main__":
     print("직접 실행")
@@ -106,8 +108,11 @@ if __name__ == "__main__":
     blurgray = getgray(blur)
     points = getCircleCenterPoint(blurgray)
     dst = tiltAndCrop(points, image)
+    if(dst == "error"):
+        print("원 인식 실패")
     imagemask = getMask(dst)
     tall = getTall(imagemask)
+
     plt.show()
 else:
     print("임포트되어 사용됨")

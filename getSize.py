@@ -100,7 +100,7 @@ def getTall(img_mask): # 키 구하는 함수 마스크를 인풋으로 줘야�
     leafstartavg = leaf / 5
     tall = rootstartavg - leafstartavg
     tall = tall.__round__(2)
-    print(tall)
+    print("키는:",tall)
     return(tall)
 
 if __name__ == "__main__":
