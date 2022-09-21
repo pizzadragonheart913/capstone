@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-housing = pd.read_csv('saved.csv')# csv 파일 읽어로기
+housing = pd.read_csv('saved5_8.csv')# csv 파일 읽어로기
 
 temp = housing['temperature'] # 온도 데이터 만 추출
 humi = housing['humidity'] #습도 데이터만 추출
@@ -76,18 +76,18 @@ print(result)
 
 mean_ratio = np.mean(result['ratio(%)'])
 
-print(mean_ratio)
+print("mean ratio",mean_ratio)
 
+from sklearn.metrics import mean_squared_error  
+
+rmse =  np.sqrt(mean_squared_error(result['pred'], result['real']))
+
+print("rmse:", rmse)
+
+
+print("score: ", model.score(x_train, y_train))
 x_testing = ([[16., 30.]])
 
 y_predict = model.predict(x_testing)
-print(y_predict)
-
-
-#예측값과 실제값의 분포
-plt.figure(figsize=(10, 5)) #표 크기 지정
-plt.scatter(x_test['LSTAT'], y_test, label='y_test')  #파란점, 실제값
-plt.scatter(x_test['LSTAT'], y_test, c='r', label='y_pred')  #빨간점, 예측값
-plt.legend(loc='best')  #범례(오른쪽 상단 박스)가 표시되는 위치 지정
-plt.show()
+print("온도:",x_testing[0][0], "습도:",x_testing[0][1], "일때 성장예측량은 ", round(y_predict[0], 5), "cm입니다")
 

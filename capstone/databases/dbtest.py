@@ -1,5 +1,7 @@
-import pymysql
+import cv2
+import matplotlib.pyplot as plt
 
-conn = pymysql.connect(host = 'localhost', user = 'root', password='101010',db='encore', charset='utf8')
+image = cv2.imread("capstone\computerVision\hi.jpg")
+plt.subplot(233),plt.imshow(image),plt.title('mask')
 
-cur = conn.cursor()
+plt.show()

@@ -8,7 +8,7 @@ import sympy as sy
 # [!!!!!@중요@!!!!!]중간에 프린트 해놓은거 다 지우고 하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #########################################3
 def optimizer():
-    housing = pd.read_csv("saved.csv")
+    housing = pd.read_csv("saved9_15.csv")
 
     temp = pd.DataFrame(housing['temperature'], columns=['temperature'])
     humi = pd.DataFrame(housing['humidity'], columns=['humidity'])
@@ -85,8 +85,8 @@ def optimizer():
 
     reg.fit(XT, y)
 
-    xtp = [0.1 * k for k in range(506)] # 
-    Xtp = [[xtp[k]**n for n in range(1,5)] for k in range(506)]
+    xtp = [0.1 * k for k in range(1000)] # 
+    Xtp = [[xtp[k]**n for n in range(1,5)] for k in range(1000)]
     ytp = reg.predict(Xtp)
 
     # print(reg.intercept_) # 예측한 함수 식의 상수항 출력
@@ -98,7 +98,7 @@ def optimizer():
     onetofour = [1,2,3,4,0] # 반복문 2중 을 막기 위한 어거지 리스트
     tempequ = ''
     for x in range(5):
-        if('-' in str(tempcoef[x])): # 앞자리가 마이너스면 추가 안함
+        if('-' == str(tempcoef[x])[0]): # 앞자리가 마이너스면 추가 안함
             tempequ += str(tempcoef[x]) +'*x^' + str(onetofour[x])
         else: #양수면 앞에 +추가
             tempequ += '+' + str(tempcoef[x]) +'*x^' + str(onetofour[x])
@@ -106,8 +106,8 @@ def optimizer():
     # print("방정식:", tempequ) #방정식 출력하는 식
 
     reg.fit(XH, y) # 온도 예측
-    xp = [0.1 * k for k in range(506)] # 
-    Xp = [[xp[k]**n for n in range(1,5)] for k in range(506)]
+    xp = [0.1 * k for k in range(1000)] # 
+    Xp = [[xp[k]**n for n in range(1,5)] for k in range(1000)]
     yp = reg.predict(Xp) # 예측 하기
 
     humicoef = list(reg.coef_) #리스트 만드는 작업
@@ -115,7 +115,7 @@ def optimizer():
     #방정식 제조하는 반복문
     humiequ = '' #빈 방정식 문자열
     for x in range(5):
-        if('-' in str(humicoef[x])): #
+        if('-' == str(humicoef[x])[0]): #
             humiequ += str(humicoef[x]) +'*x^' + str(onetofour[x])  #반복문으로 문자열을 만듦. 방정식임.
         else:# 양수면 앞에 +추가
             humiequ += '+' + str(humicoef[x]) +'*x^' + str(onetofour[x])
@@ -146,17 +146,18 @@ def optimizer():
     fhx = sy.sympify(humiequ) # 방정식을 sympy형식으로 변환
     diffedfhx = sy.diff(sy.poly(fhx), x) # 함수를 x에 대해 미분
     humiextreme = sy.solve(diffedfhx) # 미분된 함수를 풀어서 극값 계싼
-    print(diffedfhx) # 극값 한번 출력 해주고
+    # print(diffedfhx) # 극값 한번 출력 해주고
     humiext = [] #이건 극값에 대한 함수값 배열
     humiextvalue = [] #이건 극값
-    for j in range(3):
+    for j in range(len(humiextreme)):
         #if((round(humiextreme[j],2)>0) and round(humiextreme[j],2)<35):
         humiext.append(round(humiextreme[j],2)) # 극값 x값 계산
         humiextvalue.append([round(humiextreme[j], 2), round(fhx.subs(x, humiext[j]), 2)]) #2차원 리스트로 만들어서 극값과 함숫값의 정보를 담아줌
         
-    tempextvalue.sort(key=lambda x: (x[0], -x[1]))
-    humiextvalue.sort(key=lambda x: (x[0], -x[1]))
-    
+    tempextvalue.sort(key=lambda x: x[1], reverse=True)
+    humiextvalue.sort(key=lambda x: x[1], reverse=True)
+    print("tempext:", tempextvalue)
+    print("humiext: ", humiextvalue)
     returnvalue = []  
     
     for j in humiextvalue:# 습도가 일정 이하여야 최종 데이터 삽입
@@ -174,9 +175,11 @@ def optimizer():
     
     print(tempextvalue)
     print(humiextvalue)
-    
-    returnvalue.append(max(tempextvalue))  #최고의 온도 값 리스트에 삽입
-    returnvalue.append(max(humiextvalue))   # 최고의 습도 값 리스트에 삽입
+    returnvalue.append(tempextvalue[0])  #최고의 온도 값 리스트에 삽입
+    returnvalue.append(humiextvalue[0])   # 최고의 습도 값 리스트에 삽입
+
+    # returnvalue.append(max(tempextvalue))  #최고의 온도 값 리스트에 삽입
+    # returnvalue.append(max(humiextvalue))   # 최고의 습도 값 리스트에 삽입
     
     # answer = [returnvalue[0][0], returnvalue[1][0]]
     print(returnvalue)
@@ -186,7 +189,7 @@ def optimizer():
     plt.plot(xtp, ytp,'c')
     plt.plot(xp, yp, 'k')
 
-    plt.xlim(10,60) # x는 10~ 35
+    plt.xlim(10,100) # x는 10~ 35
     plt.ylim(0,8) # y는 0~8 까지
 
     plt.show() #그래프 보여줌

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import cv2
 
 def getImage():
-    image = cv2.imread("capstone\computerVision\grass1.jpg")#이미지 읽기r
+    image = cv2.imread("capstone\computerVision\hi.jpg")#이미지 읽기r
     image = cv2.resize(image, dsize=(640,480))
     plt.subplot(231),plt.imshow(image),plt.title('Input')
     return image
@@ -53,7 +53,7 @@ def tiltAndCrop(pts1, image): #원의 중심좌표 있는거로 넣어줄 것. �
 
     M = cv2.getPerspectiveTransform(pts1,pts2)# a4용지에 맞춰서 tilt, crop한다.
 
-    dst = cv2.warpPerspective(image,M,(70,175))# a4용지에 맞춰서 tilt, crop한다.
+    dst = cv2.warpPerspective(image,M,(175,150))# a4용지에 맞춰서 tilt, crop한다.
     plt.subplot(232),plt.imshow(dst),plt.title('Output')
     return dst
 
